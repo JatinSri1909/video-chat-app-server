@@ -3,7 +3,9 @@ const bodyParser = require("body-parser");
 const { Server } = require("socket.io");
 
 const app = express();
-const io = new Server();
+const io = new Server({
+  cors: true,
+});
 
 PORT = process.env.PORT || 5000;
 SOCKET_PORT = process.env.SOCKET_PORT || 8080;
