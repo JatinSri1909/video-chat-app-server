@@ -25,7 +25,7 @@ io.on("connection", (socket) => {
     socketToEmailMapping.set(socket.id, emailId);
     socket.join(roomId);
     socket.emit("joined-room", { roomId });
-     socket.broadcast.to(roomId).emit("user-connected", emailId);
+     socket.broadcast.to(roomId).emit("user-connected", {emailId});
   });
 
   socket.on('call-user', (data) => {
@@ -33,6 +33,13 @@ io.on("connection", (socket) => {
     const fromEmail = socketToEmailMapping.get(socket.id);
     const socketId = emailToSocketMapping.get(emailId);
     socket.to(socketId).emit('incoming-call', { from: fromEmail, offer });
+  });
+
+  socket.on('call-accepted', (data) => {
+    const { emailId, ans } = data;
+    const fromEmail = socketToEmailMapping.get(socket.id);
+    const socketId = emailToSocketMapping.get(emailId);
+    socket.to(socketId).emit('call-accepted', { from: fromEmail, ans });
   });
 });
 
