@@ -13,6 +13,9 @@ app.use(bodyParser.json());
 const emailToSocketMapping = new Map();
 
 io.on("connection", (socket) => {
+  
+  console.log("User connected");
+
   socket.on("join-room", (data) => {
     const { roomId, emailId } = data;
     console.log("User", emailId, "joined room", roomId);
