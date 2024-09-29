@@ -1,14 +1,18 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
 const { Server } = require("socket.io");
+const http = require("http");
+
+dotenv.config();
 
 const app = express();
-const io = new Server({
+const server = http.createServer(app);
+const io = new Server( server,{
   cors: true,
 });
 
 PORT = process.env.PORT || 5000;
-SOCKET_PORT = process.env.SOCKET_PORT || 8080;
 
 app.use(bodyParser.json());
 
@@ -59,10 +63,6 @@ io.on("connection", (socket) => {
   });
 });
 
-io.listen(SOCKET_PORT, () => {
-  console.log(`Socket Server is running on port ${SOCKET_PORT}`);
-});
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`HTTP Server is running on port ${PORT}`);
 });
