@@ -42,7 +42,3 @@ io.on("connection", (socket) => {
     socket.to(socketId).emit("call-accepted", { from: fromEmail, ans });
   });
 });
-
-server.listen(PORT, () => {
-  console.log(`HTTP Server is running on port ${PORT}`);
-});
