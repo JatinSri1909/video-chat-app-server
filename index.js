@@ -1,20 +1,11 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
 const { Server } = require("socket.io");
-const http = require("http");
 
-dotenv.config();
+PORT = process.env.PORT || 8080;
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server( server,{
+const io = new Server( PORT,{
   cors: true,
 });
 
-PORT = process.env.PORT || 5000;
-
-app.use(bodyParser.json());
 
 const emailToSocketMapping = new Map();
 const socketToEmailMapping = new Map();
