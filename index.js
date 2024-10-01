@@ -27,18 +27,17 @@ io.on("connection", (socket) => {
     io.to(to).emit("incoming:call", { from: socket.id, offer});
   });
 
-  socket.on("call-accepted", (data) => {
-    const { email, ans } = data;
-    const fromEmail = socketIdToEmailMap.get(socket.id);
-    const socketId = emailToSocketIdMap.get(email);
-    console.log(
-      "Call accepted by",
-      email,
-      "from",
-      fromEmail,
-      "with answer",
-      ans
-    );
-    socket.to(socketId).emit("call-accepted", { from: fromEmail, ans });
+  socket.on("call:accepted", ({ to, ans }) => {
+    io.to(to).emit("call:accepted", { from: socket.id, ans });
+  });
+
+  socket.on("peer:nego:needed", ({ to, offer }) => {
+    console.log("Negotiation needed", to, offer);
+    io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
+  });
+
+  socket.on("peer:nego:done", ({ to, ans }) => {
+    console.log("Negotiation done", to, ans);
+    io.to(to).emit("peer:nego:final", { from: socket.id, ans });
   });
 });
