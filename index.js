@@ -23,19 +23,8 @@ io.on("connection", (socket) => {
     io.to(socket.id).emit("room:joined", room);
   });
 
-  socket.on("call-user", (data) => {
-    const { email, offer } = data;
-    const fromEmail = socketIdToEmailMap.get(socket.id);
-    const socketId = emailToSocketIdMap.get(email);
-    console.log(
-      "Calling user",
-      email,
-      "from",
-      fromEmail,
-      "with offer",
-      offer
-    );
-    socket.to(socketId).emit("incoming-call", { from: fromEmail, offer });
+  socket.on("user:call", ({ to, offer}) => {
+    io.to(to).emit("incoming:call", { from: socket.id, offer});
   });
 
   socket.on("call-accepted", (data) => {
